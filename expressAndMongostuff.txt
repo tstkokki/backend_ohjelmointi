@@ -1,0 +1,138 @@
+/*var newMessage = Messages({
+        title: "B: alumiini",
+        content: "No moi pirkko",
+        author: "legamaster420"
+    });
+    var secondMessage = Messages({
+        title: "B: alumiini",
+        content: "Vastaus onkin C",
+        author: "legamaster420"
+    });
+    var thirdMessage = Messages({
+        title: "B: alumiini",
+        content: "moro Markku",
+        author: "legamaster420"
+    });
+    newMessage.save()
+    .then((message) => {
+        console.log(message);
+        return Messages.find({}).exec();
+    })
+    .then((messages) => {
+        console.log(messages);
+        return Messages.deleteMany({});
+    })
+    .then( () => {
+        return mongoose.connection.close();
+
+    })
+    .catch((err) => {
+        console.log(err);
+    })*/
+
+
+
+
+/*const mongo = require('mongodb');
+const assert = require('assert').strict;
+const mongo_client = mongo.MongoClient;
+
+//include our mongodb operations
+const db_operations = require('./operations');
+
+const url = "mongodb://localhost";
+const db_name = "mydb";
+const coll = "customers";
+
+mongo_client.connect(url, (err, client_object) => {
+    assert.strictEqual(err, null); //check for errors
+    console.log("Connected to MongoDB");
+
+    //get the db object from our received client
+    const db_obj = client_object.db(db_name);
+    //call inser document from operations
+    db_operations.insertDocument(db_obj, coll, {firstname: "Jami", lastname: "Junnu"}, (result) =>{
+        console.log("Insert document: \n", result.ops);
+
+        //call find documents
+        db_operations.findDocuments(db_obj, coll, (doc_array) =>{
+            console.log("Found docs: ", doc_array);
+
+            db_operations.removeDocument(db_obj, coll, {lastname: "Junnu"}, (res) =>{
+                console.log("Removed one document");
+                client_object.close();
+                console.log("Database connection closed");
+            });
+        });
+    });
+});
+*/
+
+/*const http= require('http');
+const port = 3000;
+const hostname = 'localhost';
+const express = require('express');
+
+//Creates morgan.logger module
+const morgan = require('morgan');
+//require body parser
+const bodyParser = require('body-parser');
+//Creates express app
+const app = express();
+
+//use morgan-logger
+app.use(morgan('dev'));
+//use body parser
+app.use(bodyParser.json());
+
+//get the userrouter module
+const userRouter = require('./user);
+
+//mount the router to correct path
+app.use('/users', userRouter);
+
+
+
+//app.use(express.static('/public'));
+var urlencodedParser = bodyParser.urlencoded({extended: false});
+//this matches all http-requests to/
+app.all('/', (req, res, next) =>{
+    res.statusCode = 200;
+    res.setHeader('Content-type', 'text/html');
+    next();
+});
+//get request handler
+app.get('/', (req, res, next) =>{
+    console.log("Got a GET request");
+    res.end('<html><head><title>Message Board</title></head><body><h1>List of Messages</h1><p>List stuff...</p><form method="post"><input type="text" name="Jee"><input type="submit" value="Submit"></form></body></html>');
+});
+//post request handler
+app.post('/', urlencodedParser, (req, res, next)=>{
+    console.log("Got a POST request");
+    response = {Jee:req.body.Jee};
+    console.log(response);
+    res.end('<html><head><title>Message Board</title></head><body><h1>Adding Messages</h1><p><input type="text" name="Jee" value"'+response.Jee+'"></p></body></html>');
+});
+//put request handler
+app.put('/', (req, res, next) => {
+    console.log("Got a PUT request");
+    res.end('<html><head><title>Message Board</title></head><body><h1>Update Messages</h1><p>Updated content</p></body></html>');
+});
+//delete request handler
+app.delete('/', (req, res, next) => {
+    console.log("Got a DELETE request");
+    res.end('<html><head><title>Message Board</title></head><body><h1>Deleting Messages</h1><p>Messages deleted...</p></body></html>');
+});
+//if no such static file exists, this callback is used
+/*app.use((req, res, next) => {
+    res.statusCode = 404;
+    res.setHeader('Content-type', 'text/html');
+    res.end('<html><body><h1>404 - Page not found</h1></body></html>');
+});*/
+/*
+app.get('/', (req, res) => {
+    res.send("Mo");
+});
+*/
+/*const server = http.createServer(app);
+server.listen(port, hostname, ()=>{console.log(`Server started! Running at http://${hostname}:${port}`)});*/
