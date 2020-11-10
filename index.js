@@ -41,54 +41,73 @@ app.use(session(
     saveUninitialized: false
     }));
 
+var userRouter = require('./routes/userRouter');
+app.use('/users', userRouter);
+
 //basic authentication
 function auth(req, res, next){
-    console.log(req.headers);
-    console.log('Session data: ', req.session);
     if(req.session.user){
-        if(req.session.user == 'admin'){
+        if(req.session.user == 'logged in'){
+            console.log('User access granted via session');
             next();
-        }
-    } else{
-
-        var authHeader = req.headers.authorization;
-        if(authHeader == null){
-            console.log("No authorization header found");
-            res.setHeader('WWW-Authenticate', 'Basic');
-            var err = new Error('Not authenticated!');
-            err.status = 401;
-            next(err);
         } else {
-            //process the authorization header info
-            //split
-            var auth_string = authHeader.split(' ')[1];
-            //decode (base64)
-            var decoded_auth = new Buffer.from(auth_string, 'base64').toString();
-            //get username and password
-            let username = decoded_auth.split(':')[0];
-            let password = decoded_auth.split(':')[1];
-            //check username and password
-            if (username == 'Naapuri' && password == 'Pirkko'){
-                req.session.user = 'admin';
-                // proceed
-                next();
-            } else {
-                console.log("Wrong username and/or password");
-                // if(req.cookies.login_attempts){
-                //     //get biscuits and add one
-                //     let attempts = parseInt(req.cookies.login_attempts);
-                //     attempts++;
-                //     res.cookie('login_attempts', attempts);
-                // } else {
-                //     res.cookie('login_attempts', '1');
-                // }
-                res.setHeader('Authenticate', 'Basic');
-                var err = new Error('Not Authenticated!');
-                err.status = 401;
-                next(err);
-            }
-        }   
+            var err = new Error('Not authenticated');
+            err.status = 403;
+            next(err);
+        }
     }
+    else{
+        res.setHeader('WWW-Authenticate', 'Basic');
+        var err = new Error('Not authenticated');
+        err.status = 401;
+        next(err);
+    }
+    // console.log(req.headers);
+    // console.log('Session data: ', req.session);
+    // if(req.session.user){
+    //     if(req.session.user == 'logged in'){
+    //         next();
+    //     }
+    // } else{
+
+    //     var authHeader = req.headers.authorization;
+    //     if(authHeader == null){
+    //         console.log("No authorization header found");
+    //         res.setHeader('WWW-Authenticate', 'Basic');
+    //         var err = new Error('Not authenticated!');
+    //         err.status = 401;
+    //         next(err);
+    //     } else {
+    //         //process the authorization header info
+    //         //split
+    //         var auth_string = authHeader.split(' ')[1];
+    //         //decode (base64)
+    //         var decoded_auth = new Buffer.from(auth_string, 'base64').toString();
+    //         //get username and password
+    //         let username = decoded_auth.split(':')[0];
+    //         let password = decoded_auth.split(':')[1];
+    //         //check username and password
+    //         if (username == 'Naapuri' && password == 'Pirkko'){
+    //             req.session.user = 'admin';
+    //             // proceed
+    //             next();
+    //         } else {
+    //             console.log("Wrong username and/or password");
+    //             // if(req.cookies.login_attempts){
+    //             //     //get biscuits and add one
+    //             //     let attempts = parseInt(req.cookies.login_attempts);
+    //             //     attempts++;
+    //             //     res.cookie('login_attempts', attempts);
+    //             // } else {
+    //             //     res.cookie('login_attempts', '1');
+    //             // }
+    //             res.setHeader('Authenticate', 'Basic');
+    //             var err = new Error('Not Authenticated!');
+    //             err.status = 401;
+    //             next(err);
+    //         }
+    //     }   
+    // }
 }
 //use the authentication
 app.use(auth);
