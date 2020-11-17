@@ -41,25 +41,44 @@ app.use(session(
     saveUninitialized: false
     }));
 
+
+//require passport and authentication setup
+const passport = require('passport');
+const authenticate = require('./authenticate');
+
+
+//init passport
+app.use(passport.initialize());
+//passport session init
+app.use(passport.session());
+
+//public endpoint here before user auth
+
 var userRouter = require('./routes/userRouter');
 app.use('/users', userRouter);
 
-//basic authentication
 function auth(req, res, next){
-    if(req.session.user){
-        if(req.session.user == 'logged in'){
-            console.log('User access granted via session');
-            next();
-        } else {
-            var err = new Error('Not authenticated');
-            err.status = 403;
-            next(err);
-        }
+    //basic authentication
+    // if(req.session.user){
+    //     if(req.session.user == 'logged in'){
+    //         console.log('User access granted via session');
+    //         next();
+    //     } else {
+    //         var err = new Error('Not authenticated');
+    //         err.status = 403;
+    //         next(err);
+    //     }
+    // }
+
+    //passport auth
+    if(req.user){ //is the user data included in request
+        next();
     }
     else{
-        res.setHeader('WWW-Authenticate', 'Basic');
+        //res.setHeader('WWW-Authenticate', 'Basic');
+
         var err = new Error('Not authenticated');
-        err.status = 401;
+        err.status = 403;
         next(err);
     }
     // console.log(req.headers);
@@ -117,6 +136,7 @@ app.use(auth);
 
 //get the routes and mount them
 const msgRouter = require('./routes/messageRouter');
+const { appendFileSync } = require('fs');
 
 app.use('/messages', msgRouter);
 

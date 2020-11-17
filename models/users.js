@@ -9,20 +9,33 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
+const passportLocalMongoose = require('passport-local-mongoose');
+
+// const userSchema = new Schema({
+//     username: {
+//         type: String,
+//         required: true,
+//         unique: true
+//     },
+//     password: {
+//         type: String,
+//         required: true
+//     }
+// }, {
+//     timestamps: true
+// });
+
+var User = new Schema({
+    admin: {
+        type: Boolean,
+        default: false
     }
 }, {
-    timestamps: true
+    timestamps:true
 });
 
-var Users = mongoose.model('Users', userSchema);
+User.plugin(passportLocalMongoose);
 
-module.exports = Users;
+//var Users = mongoose.model('Users', User);
+
+module.exports = mongoose.model('Users', User);
