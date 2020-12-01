@@ -1,0 +1,15 @@
+extends layout
+
+block content
+
+    if regUsers.length
+        table
+            tr
+                th Name
+                th Email
+            each regUser in regUsers
+                tr
+                    td= regUser.name
+                    td= regUser.email
+    else
+        p No registration yet D:
